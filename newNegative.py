@@ -87,16 +87,125 @@ def noChannel(num, row):
                 row[i][j] = row[i][j] if row[i][j] > int(greyNum) else int(greyNum)
     return row
 
-#TODO
-#Functions for composite colors (not exclusion)
-#Cyan, Magenta, Yellow: 
-#       Excluded = Grey
-#       Composite = Average of Non-excluded 
-#                   compositeNum = (np.sum(row[i]) - row[i][num]) / 2 
-#Full/Halves (Orange, Hot Pink, Lime, Cyan-Lime, Purple, Sky-Blue):
-#       Excluded = Grey
-#       Half = 1/3 of the total of Non-Excluded
-#       Full = 2/3 of the total of Non-Excluded
+#Function(s) composite[Color] - FullFull: Redirection functions that calls func compositeFullFull 
+#                               to target specific channel (exclude it) to create the composite negative
+#Ex: Red -> Cyan, Green -> Magenta, Blue -> Yellow
+def compositeCyan(row): 
+    return compositeFullFull(2, row) 
+def compositeMagenta(row): 
+    return compositeFullFull(1, row) 
+def compositeYellow(row): 
+    return compositeFullFull(0, row) 
+
+#Function: Creates image without targetted color of the input image to create an image of the respective composite negative color
+#           the excluded single channel (from RGB) will be greyed out
+#           the others will show up in the image as the composite value
+#Math: composite color channel value = the average of the values of unexcluded color channels of pixel 
+def compositeFullFull(num, row): 
+    #Takes in a row of the image and iterate through the columns 
+    for i in range(len(row)):
+        #Grey value = average of all color channels at the pixel at (row, col)
+        greyNum = np.average(row[i])
+        #Composite value = average of unexcluded channels at the pixel at (row, col)
+        compositeNum = (np.sum(row[i]) - row[i][num]) / 2
+        #If the composite val is less than the grey val, it becomes the grey value
+        #       otherwise it keeps the original calculated value
+        compositeNum = compositeNum if compositeNum > int(greyNum) else int(greyNum)
+        #Takes in the row AND column (pixel at (row,col)) of the image and iterate through the channels of the pixel 
+        for j in range(3): 
+            if j == num: 
+                #If the color channel is the targeted channel (num): 
+                #       it becomes the grey value
+                row[i][j] = int(greyNum)
+            else: 
+                #Else (color channel is not the targeted channel [num]): 
+                #       it becomes the composite value
+                row[i][j] = int(compositeNum)
+    return row
+
+#Function(s) composite[Color] - FullFull: Redirection functions that calls func compositeFullHalf 
+#                               to target specific channel (exclude it) to create the composite 
+#Red = 2, Green = 1, Blue = 0
+def compositeSkyBlue(row):
+    return compositeFullHalf(0, 1, row)
+def compositePurple(row):
+    return compositeFullHalf(0, 2, row)
+def compositeCyanLime(row):
+    return compositeFullHalf(1, 0, row)
+def compositeLime(row):
+    return compositeFullHalf(1, 2, row)
+def compositeHotPink(row):
+    return compositeFullHalf(2, 0, row)
+def compositeOrange(row):
+    return compositeFullHalf(2, 1, row)
+
+#Function: Creates image using both targetted colors of the input image to create an image of the composite color
+#           the excluded single channel (from RGB) will be greyed out
+#           the others will show up in the image as the composite value
+#Math: 
+#       single parts value = sum of the 2 targetted channels / 3 
+#       full = 2 * parts value 
+#       half = 1 * parts value 
+def compositeFullHalf(numFull, numHalf, row): 
+    #Takes in a row of the image and iterate through the columns 
+    for i in range(len(row)):
+        #Grey value = average of all color channels at the pixel at (row, col)
+        greyNum = np.average(row[i])
+        #Parts value = sum of channels at numFull and numHalf / 3 
+        parts = np.sum([row[i][numFull], row[i][numHalf]]) / 3
+        #Full val = 2 * Parts val 
+        #   Cannot be more than 255 to prevent integer overflow 
+        #   if full is less than the grey val, it becomes the grey val
+        full = max(min(2 * int(parts), 255), greyNum)
+        #Half val = 1 * Parts val  
+        #   if half is less than the grey val, it becomes the grey val
+        half = max(greyNum,int(parts))
+        #Takes in the row AND column (pixel at (row,col)) of the image and iterate through the channels of the pixel 
+        for j in range(3): 
+            if j == numFull:
+                #If the color channel is the targeted channel (numFull): 
+                #       it becomes the Full value
+                row[i][j] = full
+            elif j == numHalf: 
+                #If the color channel is the targeted channel (numHalf): 
+                #       it becomes the Half value
+                row[i][j] = half
+            else: 
+                #Else (color channel is not the targeted channel): 
+                #       it becomes the Grey value
+                row[i][j] = int(greyNum)
+    return row
+
+#Function: Creates an image where channels are 0 unless it is the highest value of the pixel
+def highValBlack(row):
+    #Takes in a row of the image and iterate through the columns
+    for i in range(len(row)):
+        #High val is the highest value of the pixel at (row, col)
+        highVal = np.max(row[i])
+        #Takes in the row AND column (pixel at (row,col)) of the image and iterate through the channels of the pixel 
+        for j in range(3): 
+            if row[i][j] != highVal: 
+                #If the color channel is not equal to the highest value, set it to 0 
+                #Else: it remains the same value
+                row[i][j] = 0
+    return row
+
+#Function: Creates an image where channels are grey unless it is the highest value of the pixel
+#Math: grey color channel value = the average of all the values in each color channel of pixel
+def highValGrey(row):
+    #Takes in a row of the image and iterate through the columns
+    for i in range(len(row)):
+        #Grey value = average of all color channels at the pixel at (row, col)
+        greyNum = np.average(row[i])
+        #High val is the highest value of the pixel at (row, col)
+        highVal = np.max(row[i])
+        #Takes in the row AND column (pixel at (row,col)) of the image and iterate through the channels of the pixel 
+        for j in range(3): 
+            if row[i][j] != highVal: 
+                #If the color channel is not equal to the highest value, set it to grey 
+                #Else: it remains the same value
+                row[i][j] = greyNum
+    return row
 
 #Dictionary of integers to strings that will be used for output file names
 colorWords = {
@@ -107,7 +216,18 @@ colorWords = {
     4 : "_blue", 
     5 : "_no_red", 
     6 : "_no_green", 
-    7 : "_no_blue" 
+    7 : "_no_blue", 
+    8 : "_composite_Cyan", 
+    9 : "_composite_Magenta", 
+    10 : "_composite_Yellow",
+    11 : "_composite_Orange",
+    12 : "_composite_Hot_Pink",
+    13 : "_composite_Lime", 
+    14 : "_composite_Cyan_Lime", 
+    15 : "_composite_Purple", 
+    16 : "_composite_SkyBlue", 
+    17 : "_highVal_Black", 
+    18 : "_highVal_Grey"  
 }
 
 #Dictionary of integers to functions that will be used for image modification 
@@ -119,7 +239,18 @@ colorFuncs = {
     4 : onlyBlue, 
     5 : noRed, 
     6 : noGreen, 
-    7 : noBlue 
+    7 : noBlue, 
+    8 : compositeCyan, 
+    9 : compositeMagenta, 
+    10 : compositeYellow,
+    11 : compositeOrange,
+    12 : compositeHotPink,
+    13 : compositeLime, 
+    14 : compositeCyanLime, 
+    15 : compositePurple, 
+    16 : compositeSkyBlue, 
+    17 : highValBlack, 
+    18 : highValGrey
 }
 
 png = ".png"

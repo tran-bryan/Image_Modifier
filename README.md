@@ -11,7 +11,10 @@ List of modifications:
 * Create a greyscale of the image. 
 * Create a red/green/blue (choose one) -scale of the image. 
 * Create an image without red/green/blue (choose one). 
+* Create a full/full composite (Cyan, Magenta, Yellow) - scale of the image. 
+* Create a full/half composite (Orange, Hot Pink, Lime, Cyan-Lime, Purple, Sky-Blue) - scale of the image. 
+* Create an image that has each pixel only show the highest value channel while other channels are 0 (black)
+* Create an image that has each pixel only show the highest value channel while other channels are grey-value (average of channel values)
 
 TODO List: 
 * Make user input to tell program how many processes to use at a time for parallel processing. 
-* Make function that creates an image for specific composite colors: Cyan, Magenta, Yellow, Orange, Hot Pink, Lime, Cyan-Lime, Purple, Sky-Blue. 
