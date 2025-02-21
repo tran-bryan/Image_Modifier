@@ -2,9 +2,9 @@
 Summary: Takes in an image file inputted by user and then creates an output image file of the input file with a specific color modification. Uses parallel processing to quicken image modification. 
 
 Notes: 
-* Only works for RGB files. 
-* Currently will only output .png files. 
-* Currently parallel processing is set to use 10 processes at once. 
+* Default Color Model is RGB. 
+* Default input and output file type is ".png". 
+* Default parallel processing is set to use 10 processes at once. 
 
 List of modifications: 
 * Create a negative of the image. 
@@ -16,5 +16,8 @@ List of modifications:
 * Create an image that has each pixel only show the highest value channel while other channels are 0 (black)
 * Create an image that has each pixel only show the highest value channel while other channels are grey-value (average of channel values)
 
-TODO List: 
-* Make user input to tell program how many processes to use at a time for parallel processing. 
+Instructions: 
+1 After executing command, a request for file name input appears. 
+2 On successful input for file, a request for choice of image modification appears. 
+3 On successful input for choise, program proccess the image to output the modified image. 
+4 Output image by default will be placed in the same folder/directory as program/code file. 

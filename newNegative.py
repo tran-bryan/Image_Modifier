@@ -288,6 +288,7 @@ def requestChoice():
     #Intial return value settings
     inputChoice = None
     #Keep querying user until input is valid
+    print("Available choices: ", colorWords)
     while(notWorking): 
         #Takes in user input for the modification choice
         inputChoice = input(choice_req)
@@ -318,8 +319,7 @@ if __name__ == '__main__':
     
     #Starts parallel processing for faster image modification processing
     #Number of processes depends on user's number of cores on computer
-    #EX: Author's computer has 10 cores thus processes=10
-    #TODO: Make user input for dynamic processes/core to use
+    #EX: Author's computer has 10 cores thus processes=10 
     pool = Pool(processes=10)
     #In parallel process, calls chosen image modification function onto the rows of each image. 
     #Each process takes on 1 row at a time. 
