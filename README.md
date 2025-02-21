@@ -17,7 +17,7 @@ List of modifications:
 * Create an image that has each pixel only show the highest value channel while other channels are grey-value (average of channel values)
 
 Instructions: 
-1 After executing command, a request for file name input appears. 
-2 On successful input for file, a request for choice of image modification appears. 
-3 On successful input for choise, program proccess the image to output the modified image. 
-4 Output image by default will be placed in the same folder/directory as program/code file. 
+1. After executing command, a request for file name input appears. 
+2. On successful input for file, a request for choice of image modification appears. 
+3. On successful input for choise, program proccess the image to output the modified image. 
+4. Output image by default will be placed in the same folder/directory as program/code file. 
